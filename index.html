@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>SOVA Installer</title>
 
+<!-- ESP Web Tools -->
 <script type="module" src="https://unpkg.com/esp-web-tools/dist/web/install-button.js?module"></script>
 <script type="module" src="https://unpkg.com/esp-web-tools/dist/web/serial-terminal.js?module"></script>
 
@@ -17,13 +18,11 @@ body {
 }
 
 img.logo {
-  width: 250px;
-  margin-bottom: 20px;
+  width:250px;
+  margin-bottom:20px;
 }
 
-h1 {
-  margin: 10px 0;
-}
+h1 { margin:10px 0; }
 
 button {
   font-size:22px;
@@ -39,12 +38,10 @@ progress {
   width:80%;
   height:25px;
   margin-top:20px;
-  border-radius: 5px;
+  border-radius:5px;
 }
 
-p {
-  font-size:16px;
-}
+p { font-size:16px; }
 </style>
 </head>
 
@@ -54,22 +51,42 @@ p {
 <h1>SOVA ESP32-S3 Installer</h1>
 <p>Connect your device via USB and press Install</p>
 
+<!-- Кнопка прошивки -->
 <esp-web-install-button id="installer" manifest="manifest.json">
   <button slot="activate">Install Firmware</button>
 </esp-web-install-button>
 
+<!-- Прогрессбар -->
 <progress id="progress" value="0" max="100"></progress>
 <br><br>
 
-<esp-web-serial-terminal></esp-web-serial-terminal>
+<!-- Serial Monitor -->
+<esp-web-serial-terminal id="terminal"></esp-web-serial-terminal>
 
 <script>
+const installer = document.getElementById('installer');
 const progress = document.getElementById('progress');
+const terminal = document.getElementById('terminal');
 
-// Слушаем глобальное событие install-progress
-document.addEventListener('install-progress', e => {
-  const p = e.detail.percentage;
-  progress.value = p;
+// Прогресс прошивки
+installer.addEventListener('install-progress', e => {
+  progress.value = e.detail.percentage;
+});
+
+// Логи прошивки в терминал
+installer.addEventListener('output', e => {
+  terminal.write(e.detail + '\n');
+});
+
+// Принудительное соединение с устройством перед прошивкой
+installer.addEventListener('activate', async e => {
+  try {
+    await installer.connect();
+    console.log('Device connected');
+  } catch(err) {
+    console.error('Failed to connect:', err);
+    alert('Cannot connect device. Make sure USB is allowed.');
+  }
 });
 </script>
 
