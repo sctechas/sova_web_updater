@@ -32,8 +32,10 @@ h1{ margin-bottom:10px; }
 const installer = document.getElementById('installer');
 const progress = document.getElementById('progress');
 
-installer.addEventListener('progress', e => {
-  progress.value = e.detail.percentage;
+// Слушаем событие install-progress на документе
+document.addEventListener('install-progress', e => {
+  const p = e.detail.percentage;  // процент прошивки
+  progress.value = p;
 });
 </script>
 
