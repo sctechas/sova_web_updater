@@ -8,14 +8,49 @@
 <script type="module" src="https://unpkg.com/esp-web-tools/dist/web/serial-terminal.js?module"></script>
 
 <style>
-body { background:#111; color:white; font-family:Arial; text-align:center; margin-top:50px; }
-button{ font-size:20px; padding:12px 30px; border:none; border-radius:8px; background:#00aaff; color:white; cursor:pointer; }
-progress{ width:80%; height:20px; margin-top:20px; }
-h1{ margin-bottom:10px; }
+body {
+  background:#111;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  margin-top:30px;
+}
+
+img.logo {
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+button {
+  font-size:22px;
+  padding:15px 40px;
+  border:none;
+  border-radius:10px;
+  background:#00aaff;
+  color:white;
+  cursor:pointer;
+}
+
+progress {
+  width:80%;
+  height:25px;
+  margin-top:20px;
+  border-radius: 5px;
+}
+
+p {
+  font-size:16px;
+}
 </style>
 </head>
 
 <body>
+
+<img src="logo.png" class="logo" alt="SOVA Logo">
 <h1>SOVA ESP32-S3 Installer</h1>
 <p>Connect your device via USB and press Install</p>
 
@@ -29,12 +64,11 @@ h1{ margin-bottom:10px; }
 <esp-web-serial-terminal></esp-web-serial-terminal>
 
 <script>
-const installer = document.getElementById('installer');
 const progress = document.getElementById('progress');
 
-// Слушаем событие install-progress на документе
+// Слушаем глобальное событие install-progress
 document.addEventListener('install-progress', e => {
-  const p = e.detail.percentage;  // процент прошивки
+  const p = e.detail.percentage;
   progress.value = p;
 });
 </script>
