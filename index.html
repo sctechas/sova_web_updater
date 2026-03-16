@@ -61,20 +61,24 @@ Devices flashed: <span id="counter">...</span>
 const installer = document.getElementById('installer');
 const counterEl = document.getElementById("counter");
 
-// загрузка текущего значения
+// загрузить текущее значение
 fetch("https://api.countapi.xyz/get/sova/flash")
 .then(r => r.json())
 .then(data => {
   counterEl.innerText = data.value || 0;
 });
 
-// увеличение после прошивки
-installer.addEventListener('install-finished', async () => {
+// слушаем изменение состояния прошивки
+installer.addEventListener("state-changed", async (ev) => {
 
-  const r = await fetch("https://api.countapi.xyz/hit/sova/flash");
-  const data = await r.json();
+  if (ev.detail.state === "finished") {
 
-  counterEl.innerText = data.value;
+    const r = await fetch("https://api.countapi.xyz/hit/sova/flash");
+    const data = await r.json();
+
+    counterEl.innerText = data.value;
+
+  }
 
 });
 </script>
