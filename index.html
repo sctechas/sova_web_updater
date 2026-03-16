@@ -34,13 +34,6 @@ button {
   cursor:pointer;
 }
 
-progress {
-  width:80%;
-  height:25px;
-  margin-top:20px;
-  border-radius:5px;
-}
-
 p { font-size:16px; }
 </style>
 </head>
@@ -56,40 +49,5 @@ p { font-size:16px; }
 <esp-web-install-button id="installer" manifest="manifest.json">
   <button slot="activate">Install Firmware</button>
 </esp-web-install-button>
-
-<!-- Прогрессбар -->
-<progress id="progress" value="0" max="100"></progress>
-<br><br>
-
-<!-- Serial Monitor -->
-<esp-web-serial-terminal id="terminal"></esp-web-serial-terminal>
-
-<script>
-const installer = document.getElementById('installer');
-const progress = document.getElementById('progress');
-const terminal = document.getElementById('terminal');
-
-// Прогресс прошивки
-installer.addEventListener('install-progress', e => {
-  progress.value = e.detail.percentage;
-});
-
-// Логи прошивки в терминал
-installer.addEventListener('output', e => {
-  terminal.write(e.detail + '\n');
-});
-
-// Принудительное соединение с устройством перед прошивкой
-installer.addEventListener('activate', async e => {
-  try {
-    await installer.connect();
-    console.log('Device connected');
-  } catch(err) {
-    console.error('Failed to connect:', err);
-    alert('Cannot connect device. Make sure USB is allowed.');
-  }
-});
-</script>
-
 </body>
 </html>
