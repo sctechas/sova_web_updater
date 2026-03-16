@@ -45,9 +45,38 @@ p { font-size:16px; }
 <p>Press and hold IO1</p>
 <p>Connect your device via USB</p>
 <p>Press Install</p>
+<p>Reboot your device</p>
 <!-- Кнопка прошивки -->
 <esp-web-install-button id="installer" manifest="manifest.json">
   <button slot="activate">Install Firmware</button>
 </esp-web-install-button>
+<p style="margin-top:20px;font-size:18px;color:#00ffaa;">
+Devices flashed: <span id="counter">...</span>
+</p>
+
+
+
+
+<script>
+const installer = document.getElementById('installer');
+const counterEl = document.getElementById("counter");
+
+// загрузка текущего значения
+fetch("https://api.countapi.xyz/get/sova/flash")
+.then(r => r.json())
+.then(data => {
+  counterEl.innerText = data.value || 0;
+});
+
+// увеличение после прошивки
+installer.addEventListener('install-finished', async () => {
+
+  const r = await fetch("https://api.countapi.xyz/hit/sova/flash");
+  const data = await r.json();
+
+  counterEl.innerText = data.value;
+
+});
+</script>
 </body>
 </html>
